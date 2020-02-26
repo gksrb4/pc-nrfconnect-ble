@@ -43,6 +43,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { logger } from 'nrfconnect/core';
 
 import * as AdapterActions from '../actions/adapterActions';
 import * as DiscoveryActions from '../actions/discoveryActions';
@@ -62,6 +63,8 @@ class DiscoveredDevices extends React.PureComponent {
         window.addEventListener('core:clear-scan', clearDevicesList);
 
         this.handleFilterChange = this.handleFilterChange.bind(this);
+        this.handleFilterRssiChange = this.handleFilterRssiChange.bind(this);
+        this.handleFilterVersionChange = this.handleFilterVersionChange.bind(this);
         this.handleSortByRssiCheckedChange = this.handleCheckedChange.bind(this, 'sortByRssi');
     }
 
@@ -70,6 +73,8 @@ class DiscoveredDevices extends React.PureComponent {
         if (clearDevicesList) {
             bindHotkey('alt+c', clearDevicesList);
         }
+        const { setDiscoveryOptions } = this.props;
+        setDiscoveryOptions(new DiscoveryOptions());
     }
 
     handleCheckedChange(property, e) {
@@ -82,6 +87,23 @@ class DiscoveredDevices extends React.PureComponent {
         const { setDiscoveryOptions } = this.props;
         this.discoveryOptions.filterString = e.target.value;
         setDiscoveryOptions(this.discoveryOptions);
+    }
+
+    handleFilterVersionChange(e) {
+        const { setDiscoveryOptions } = this.props;
+        this.discoveryOptions.filterVersion = e.target.value;
+        // logger.info('handleFilterVersionChange');
+        // logger.info(e.target.value);
+        setDiscoveryOptions(this.discoveryOptions);
+    }
+
+    handleFilterRssiChange(e) {
+        const { setDiscoveryOptions } = this.props;
+        const rssi = Number(e.target.value);
+        if (rssi) {
+            this.discoveryOptions.filterRssi = rssi;
+            setDiscoveryOptions(this.discoveryOptions);
+        }
     }
 
     handleOptionsExpanded() {
@@ -128,6 +150,28 @@ class DiscoveredDevices extends React.PureComponent {
                     labelClassName=""
                     wrapperClassName=""
                     placeholder="Device name or address"
+                />
+                <TextInput
+                    inline
+                    title="Version"
+                    label="Version:"
+                    className="adv-value"
+                    value={discoveryOptions.filterVersion}
+                    onChange={this.handleFilterVersionChange}
+                    labelClassName=""
+                    wrapperClassName=""
+                    placeholder="Version"
+                />
+                <TextInput
+                    inline
+                    title="Rssi"
+                    label="Rssi:"
+                    className="adv-value"
+                    value={discoveryOptions.filterRssi}
+                    onChange={this.handleFilterRssiChange}
+                    labelClassName=""
+                    wrapperClassName=""
+                    placeholder="Rssi"
                 />
             </div>
         ) : null;
