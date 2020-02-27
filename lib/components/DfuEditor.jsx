@@ -75,7 +75,7 @@ class DfuEditor extends React.PureComponent {
     componentDidMount() {
         // logger.info('componentDidMount');
         const { onStartDfu } = this.props;
-        setTimeout(onStartDfu, 250);
+        setTimeout(onStartDfu, 500);
     }
 
     getStatus() {
