@@ -39,6 +39,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { FirmwareRegistry } from 'pc-ble-driver-js';
 import { logger, getAppDir, getUserDataDir } from 'nrfconnect/core';
+import electron from 'electron';
 import reducers from './lib/reducers';
 import * as DiscoveryActions from './lib/actions/discoveryActions';
 import * as AdapterActions from './lib/actions/adapterActions';
@@ -46,8 +47,9 @@ import SelectedView from './lib/components/SelectedView';
 import BLEEventDialog from './lib/containers/BLEEventDialog';
 import DiscoveredDevices from './lib/containers/DiscoveredDevices';
 import { confirmUserUUIDsExist } from './lib/utils/uuid_definitions';
-
+import SelectFile from './lib/containers/SelectFile';
 import './resources/css/styles.scss';
+
 
 /* eslint react/prop-types: 0 */
 
@@ -82,6 +84,7 @@ export default {
     decorateSidePanel: SidePanel => (
         props => (
             <SidePanel>
+                <SelectFile {...props} />
                 <DiscoveredDevices {...props} />
             </SidePanel>
         )

@@ -45,6 +45,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ProgressBar from 'react-bootstrap/ProgressBar';
+import { logger } from 'nrfconnect/core';
 
 import DfuButton from './DfuButton';
 import DfuThroughputGraph from './DfuThroughputGraph';
@@ -71,6 +72,12 @@ function createPackageInfoString(packageInfo) {
 }
 
 class DfuEditor extends React.PureComponent {
+    componentDidMount() {
+        // logger.info('componentDidMount');
+        const { onStartDfu } = this.props;
+        setTimeout(onStartDfu, 250);
+    }
+
     getStatus() {
         const { isCompleted, isStopping, fileNameBeingTransferred } = this.props;
         let { status } = this.props;
@@ -85,6 +92,7 @@ class DfuEditor extends React.PureComponent {
         }
         return `${status}...`;
     }
+
 
     renderGraph() {
         const { throughput } = this.props;
@@ -103,7 +111,6 @@ class DfuEditor extends React.PureComponent {
 
     render() {
         const {
-            onChooseFile,
             filePath,
             packageInfo,
             percentCompleted,
@@ -120,16 +127,6 @@ class DfuEditor extends React.PureComponent {
                     <Form.Label column sm={2} className="text-right">Zip file</Form.Label>
                     <InputGroup as={Col} sm={10}>
                         <Form.Control value={filePath} readOnly />
-                        <InputGroup.Append>
-                            <Button
-                                id="choose-file"
-                                variant="outline-secondary"
-                                disabled={isStarted || isCompleted}
-                                onClick={onChooseFile}
-                            >
-                                Choose
-                            </Button>
-                        </InputGroup.Append>
                     </InputGroup>
                 </Form.Group>
                 { packageInfo && (
@@ -173,7 +170,6 @@ DfuEditor.propTypes = {
     isCompleted: PropTypes.bool,
     isStopping: PropTypes.bool,
     isStarted: PropTypes.bool,
-    onChooseFile: PropTypes.func.isRequired,
     onStartDfu: PropTypes.func.isRequired,
     onStopDfu: PropTypes.func.isRequired,
     throughput: PropTypes.object,

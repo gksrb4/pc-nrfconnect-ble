@@ -136,7 +136,9 @@ class ConnectedDevice extends React.PureComponent {
         };
 
         const dfuIcon = require('../../resources/dfu_icon.png'); // eslint-disable-line
-
+        if (isDfuSupported) {
+            onClickDfu();
+        }
         return (
             <div
                 ref={node => { this.node = node; }}

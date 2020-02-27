@@ -99,11 +99,8 @@ class DiscoveredDevices extends React.PureComponent {
 
     handleFilterRssiChange(e) {
         const { setDiscoveryOptions } = this.props;
-        const rssi = Number(e.target.value);
-        if (rssi) {
-            this.discoveryOptions.filterRssi = rssi;
-            setDiscoveryOptions(this.discoveryOptions);
-        }
+        this.discoveryOptions.filterRssi = e.target.value;
+        setDiscoveryOptions(this.discoveryOptions);
     }
 
     handleOptionsExpanded() {

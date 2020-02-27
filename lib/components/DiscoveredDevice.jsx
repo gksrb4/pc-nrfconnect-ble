@@ -40,10 +40,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { pascalCase, camelCase } from 'change-case';
 import Button from 'react-bootstrap/Button';
-
+import { PasstechDevice } from '../utils/passtech';
 import { ImmutableDevice } from '../utils/api';
 import { toHexString } from '../utils/stringUtil';
 import { getUuidName } from '../utils/uuid_definitions';
+import { loadDfuPackageInfo } from '../actions/dfuActions';
 
 const RssiBars = ({ rssi }) => {
     let bars = 0;
@@ -142,6 +143,7 @@ class DiscoveredDevice extends React.PureComponent {
             onCancelConnect,
             onConnect,
             adapterIsConnecting,
+            filePath,
         } = this.props;
 
         e.stopPropagation();
@@ -149,6 +151,7 @@ class DiscoveredDevice extends React.PureComponent {
         if (adapterIsConnecting) {
             onCancelConnect(device);
         } else {
+            loadDfuPackageInfo(filePath);
             onConnect(device);
         }
     }
@@ -170,7 +173,10 @@ class DiscoveredDevice extends React.PureComponent {
         let flagsDiv = '';
         let servicesDiv = '';
         let addressDiv = '';
+        let lockerDiv = '';
         let addressTypeDiv = '';
+
+        const passtechDevice = new PasstechDevice(device.adData.get('BLE_GAP_AD_TYPE_MANUFACTURER_SPECIFIC_DATA'));
 
         if (device.isExpanded) {
             if (device.advType) {
@@ -258,6 +264,8 @@ class DiscoveredDevice extends React.PureComponent {
 
         addressDiv = <div className="address-text selectable">{device.address}</div>;
 
+        lockerDiv = <div className="locker-text selectable">{passtechDevice.getFullName()}</div>;
+
         const dirIcon = device.isExpanded ? 'menu-down' : 'menu-right';
 
         if (!device) {
@@ -288,7 +296,8 @@ class DiscoveredDevice extends React.PureComponent {
                         >
                             <span>{isConnecting ? 'Cancel' : 'Connect'}</span><i className="mdi mdi-link-variant" />
                         </Button>
-                        {addressDiv}
+                        {/* {addressDiv} */}
+                        {lockerDiv}
                     </div>
                     <div>
                         <span
@@ -321,6 +330,7 @@ DiscoveredDevice.propTypes = {
     onConnect: PropTypes.func.isRequired,
     onCancelConnect: PropTypes.func.isRequired,
     onToggleExpanded: PropTypes.func.isRequired,
+    filePath: PropTypes.string.isRequired,
 };
 
 export default DiscoveredDevice;

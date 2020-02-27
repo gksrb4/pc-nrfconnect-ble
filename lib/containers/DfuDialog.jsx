@@ -43,6 +43,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { logger } from 'nrfconnect/core';
 
 import * as DfuActions from '../actions/dfuActions';
 import ConfirmationDialog from '../components/ConfirmationDialog';
@@ -59,11 +60,9 @@ class DfuDialog extends React.PureComponent {
         this.onStopDfu = this.onStopDfu.bind(this);
     }
 
-
     onFileSelected(filePath) {
-        const { setDfuFilePath, loadDfuPackageInfo } = this.props;
+        const { setDfuFilePath } = this.props;
         setDfuFilePath(filePath);
-        loadDfuPackageInfo(filePath);
     }
 
     onStartDfu() {
@@ -114,10 +113,15 @@ class DfuDialog extends React.PureComponent {
             hideConfirmCloseDialog,
             isConfirmCloseVisible,
             device,
+            isCompleted,
         } = this.props;
 
         if (!isVisible) {
             return null;
+        }
+
+        if (isCompleted) {
+            hideDfuDialog();
         }
 
         return (
@@ -169,12 +173,14 @@ DfuDialog.propTypes = {
     startDfu: PropTypes.func.isRequired,
     filePath: PropTypes.string.isRequired,
     stopDfu: PropTypes.func.isRequired,
+    isCompleted: PropTypes.bool,
     isStarted: PropTypes.bool.isRequired,
     showConfirmCloseDialog: PropTypes.func.isRequired,
 };
 
 DfuDialog.defaultProps = {
     device: null,
+    isCompleted: false,
 };
 
 function mapStateToProps(state) {

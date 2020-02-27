@@ -1,7 +1,7 @@
 {
   "name": "pc-nrfconnect-ble",
-  "version": "0.0.0 from 2.3.2",
-  "description": "Dfu for ble",
+  "version": "0.0.0",
+  "description": "Dfu for ble from 2.3.2",
   "displayName": "Bluetooth Low Energy - cus",
   "repository": {
     "type": "git",
@@ -14,6 +14,7 @@
     "nrfconnect": "^3.2.0"
   },
   "scripts": {
+    "start": "electron .",
     "build": "nrfconnect-scripts build-prod",
     "clean-dist": "rimraf dist",
     "clean-modules": "rimraf \"node_modules/!(rimraf|.bin)\"",
@@ -45,5 +46,7 @@
     "react-textarea-autosize": "^7.1.2",
     "uuid-v4": "^0.1.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "electron-react-devtools": "^0.5.3"
+  }
 }
