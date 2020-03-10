@@ -176,8 +176,12 @@ class DiscoveredDevice extends React.PureComponent {
         let lockerDiv = '';
         let addressTypeDiv = '';
 
-        const passtechDevice = new PasstechDevice(device.adData.get('BLE_GAP_AD_TYPE_MANUFACTURER_SPECIFIC_DATA'));
-
+        let passtechDevice = null;
+        try {
+            passtechDevice = new PasstechDevice(device.adData.get('BLE_GAP_AD_TYPE_MANUFACTURER_SPECIFIC_DATA'));
+        } catch (e) {
+            // logger.info(e);
+        }
         if (device.isExpanded) {
             if (device.advType) {
                 this.currentAdvType = device.advType;
@@ -264,7 +268,7 @@ class DiscoveredDevice extends React.PureComponent {
 
         addressDiv = <div className="address-text selectable">{device.address}</div>;
 
-        lockerDiv = <div className="locker-text selectable">{passtechDevice.getFullName()}</div>;
+        lockerDiv = <div className="locker-text selectable">{passtechDevice ? passtechDevice.getFullName() : 'unkown'}</div>;
 
         const dirIcon = device.isExpanded ? 'menu-down' : 'menu-right';
 
