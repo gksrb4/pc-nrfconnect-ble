@@ -116,11 +116,9 @@ function formatValue(value, key) {
         case INCOMPLETE_16_UUIDS:
         case COMPLETE_128_UUIDS:
         case INCOMPLETE_128_UUIDS:
-            if (value) {
-                // Create array of uuid text strings
-                return value.replace(' ', '').split(',');
-            }
-            return null;
+            // Create array of uuid text strings
+            return value.replace(' ', '').split(',');
+
         case TX_POWER:
             return parseInt(value, 10);
 
@@ -164,9 +162,6 @@ function validateLocalNameString(value) {
 }
 
 function validateUuid(value, uuidType) {
-    if (!value) {
-        return ERROR;
-    }
     const cleanedUuidArray = value.replace(/0[xX]/g, '').replace('-', '').split(',');
     let regex;
     switch (uuidType) {
